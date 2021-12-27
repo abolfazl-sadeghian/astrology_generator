@@ -3,6 +3,11 @@
 // Make API Call
 // Present the API result to the user.
 // Fix Ascii Art Logo
+
+// Required libraries = prompt-sync
+
+const prompt = require('prompt-sync')({sigint: true});
+
 let astrology_signs = { aries :     { icon :'♈', description : '(Ram): March 21–April 19' },
                         taurus :    { icon :'♉', description : '(Bull): April 20–May 20' },
                         gemini :    { icon :'♊', description : '(Twins): May 21–June 21'},
@@ -34,9 +39,30 @@ const welcome_and_choices = ()=>{
 
     }
 
+    const user_choice = get_user_choice_and_validate()
 
 
 
+}
+
+const get_user_choice_and_validate = () => {
+    while(true){
+        let user_choice = parseInt(prompt('Please enter a number to make your choice : '))
+        if(isNaN(user_choice)){
+            user_choice = 0
+        }
+        if (user_choice > 0 && user_choice < 13){
+            return user_choice    
+        }
+        console.log(user_choice)
+        console.log('\x1b[31m%s\x1b[0m','Invalid input please choose a number between 1 - 12 ')
+            
+    }
+
+}
+
+const make_api_call =(user_choice) => {
+    
 }
 
 welcome_and_choices()
