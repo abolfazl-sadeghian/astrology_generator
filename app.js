@@ -1,7 +1,3 @@
-// Present user with choices
-// Get user input
-// Make API Call
-// Present the API result to the user.
 // Fix Ascii Art Logo
 
 // Required libraries = prompt-sync
@@ -9,7 +5,7 @@
 const prompt = require('prompt-sync')({sigint: true});
 // const request = require('request');
 const axios = require('axios');
-const { lstat } = require('fs');
+
 
 let astrology_signs = { aries :     { icon :'♈', description : '(Ram): March 21–April 19' },
                         taurus :    { icon :'♉', description : '(Bull): April 20–May 20' },
@@ -27,7 +23,7 @@ let astrology_signs = { aries :     { icon :'♈', description : '(Ram): March 2
 }
 
 const sign_array = []
-
+let  user_choice = ''
 
 const welcome_and_choices = ()=>{
     console.log()
@@ -45,9 +41,9 @@ const welcome_and_choices = ()=>{
 
     }
     
-    const user_choice = get_user_choice_and_validate()
+    user_choice = get_user_choice_and_validate()
     make_api_call(user_choice)
-//   present_results(result)
+
 
 
 }
@@ -74,32 +70,22 @@ let sign_to_check = sign_array[user_choice - 1]
 let url_line = `https://aztro.sameerkumar.website/?sign=${sign_to_check}&day=today`
 
 axios.post(url_line).then((result)=>{
-    console.log(result.data.description)
+    present_results(result.data)
 })
 
 
-
-// let options = {
-// url: `https://aztro.sameerkumar.website/?sign=${sign_to_check}&day=today`,
-// method: 'POST'
-// };
-
-//     function callback(error, response, body) {
-//         if (!error && response.statusCode == 200) {
-//         recieved_data = body
-//         return recieved_data
-//         }
-//     }
-
-// console.log(request(options, callback));
-// console.log(recieved_data)
-// console.log(recieved_data)
-// return dataPromise
 }
 
 const present_results = (json) => {
-    //console.log("((((",json)
-   // console.log(json.data,"lllllll")
+    user_sign = astrology_signs[sign_array[user_choice - 1]]
+    console.log( sign_array[user_choice - 1] +"-"+user_sign.icon + " : "+ user_sign.description )
+    console.log('Today is '+ json.current_date)
+    console.log('Your astrology for today is : ')
+    console.log(json.description)
+    console.log('Your mood is : '+ json.mood)
+    console.log('Your lucky number is : '+ json.lucky_number)
+    console.log("_".repeat(60))
+
 }
 
 welcome_and_choices()
