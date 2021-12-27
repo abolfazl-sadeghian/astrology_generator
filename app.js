@@ -7,6 +7,7 @@
 // Required libraries = prompt-sync
 
 const prompt = require('prompt-sync')({sigint: true});
+const request = require('request');
 
 let astrology_signs = { aries :     { icon :'♈', description : '(Ram): March 21–April 19' },
                         taurus :    { icon :'♉', description : '(Bull): April 20–May 20' },
@@ -23,6 +24,7 @@ let astrology_signs = { aries :     { icon :'♈', description : '(Ram): March 2
 
 }
 
+const sign_array = []
 
 
 const welcome_and_choices = ()=>{
@@ -31,16 +33,18 @@ const welcome_and_choices = ()=>{
     console.log("Please choose your Astrology sign to recieve today's astrology : ")
     console.log()
 
+    
     let counter = 1
     for (const sign in astrology_signs ){
+        sign_array.push(sign)
         console.log(counter +"."+ astrology_signs[sign].icon +" :\t"+ sign.charAt(0).toUpperCase()+ sign.slice(1) +":\t" + astrology_signs[sign].description) 
         console.log("-".repeat(70))
         counter++
 
     }
-
+    
     const user_choice = get_user_choice_and_validate()
-
+    present_results (make_api_call(user_choice))
 
 
 }
@@ -62,6 +66,27 @@ const get_user_choice_and_validate = () => {
 }
 
 const make_api_call =(user_choice) => {
+
+let sign_to_check = sign_array[user_choice - 1]
+let recieved_data = ''
+    
+let options = {
+url: `https://aztro.sameerkumar.website/?sign=${sign_to_check}&day=today`,
+method: 'POST'
+};
+
+    function callback(error, response, body) {
+        if (!error && response.statusCode == 200) {
+        console.log(body)
+        recieved_data = JSON.parse(body)
+        }
+    }
+
+request(options, callback);
+return recieved_data
+}
+
+const present_results = (json) => {
     
 }
 
